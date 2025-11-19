@@ -1,0 +1,35 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.vort2014</groupId>
+    <artifactId>util</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <properties>
+        <!-- for maven-compiler-plugin -->
+<!--        <maven.compiler.source>17</maven.compiler.source>-->
+<!--        <maven.compiler.target>17</maven.compiler.target>-->
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- maven build timestamp -->
+        <maven.build.timestamp>${maven.build.timestamp}</maven.build.timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss.SSS</maven.build.timestamp.format>
+
+        <!-- for all maven reporting plugins -->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- plugins version -->
+
+        <!-- libraries version -->
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>3.5.7</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
