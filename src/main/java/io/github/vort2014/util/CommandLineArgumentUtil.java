@@ -10,8 +10,37 @@ import java.util.Set;
 // key detach is present in the response map
 public interface CommandLineArgumentUtil {
 
-    static Map<String, String> parseArguments(Set<String> requiredArgumentNames, String[] args) {
+    /**
+     * Parse command line arguments with required argument names
+     *
+     * @param args command line arguments from main method
+     * @param requiredArgumentNames required argument name
+     * @return arguments as Map<argName, argValue>
+     * @throws IllegalArgumentException if required argument name is absent
+     */
+    static Map<String, String> parseArguments(String[] args, Set<String> requiredArgumentNames) {
+        var res = parseArguments(args);
 
+        // Check for required arguments
+        if (requiredArgumentNames != null && !requiredArgumentNames.isEmpty()) {
+            var sb = new StringBuilder();
+            for (var requiredArgumentName: requiredArgumentNames) {
+                var value = res.get(requiredArgumentName);
+                if (value == null) sb.append("Missing required argument: --").append(requiredArgumentName).append("\n");
+            }
+            if (!sb.isEmpty()) throw new IllegalArgumentException(sb.toString());
+        }
+
+        return res;
+    }
+
+    /**
+     * Parse command line arguments
+     *
+     * @param args command line arguments from main method
+     * @return arguments as Map<argName, argValue>
+     */
+    static Map<String, String> parseArguments(String[] args) {
         // remove leading and trailing spaces
         for (int i = 0; i < args.length; i++) {
             if (args[i] != null) {
@@ -53,17 +82,6 @@ public interface CommandLineArgumentUtil {
                 res.put(key, value);
             }
         }
-
-        // Check for required arguments
-        if (requiredArgumentNames != null && !requiredArgumentNames.isEmpty()) {
-            var sb = new StringBuilder();
-            for (var requiredArgumentName: requiredArgumentNames) {
-                var value = res.get(requiredArgumentName);
-                if (value == null) sb.append("Missing required argument: --").append(requiredArgumentName).append("\n");
-            }
-            if (!sb.isEmpty()) throw new IllegalArgumentException(sb.toString());
-        }
-
         return res;
     }
 }

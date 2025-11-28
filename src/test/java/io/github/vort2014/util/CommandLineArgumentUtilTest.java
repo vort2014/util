@@ -28,7 +28,7 @@ class CommandLineArgumentUtilTest {
         };
         var requiredArgumentNames = Set.of("end", "start",  "transportation-method");
 
-        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(requiredArgumentNames, args))
+        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(args, requiredArgumentNames))
                 .hasMessageStartingWith("Missing required argument: --start");
     }
 
@@ -45,9 +45,9 @@ class CommandLineArgumentUtilTest {
         };
 
         // when
-        var map1 = CommandLineArgumentUtil.parseArguments(null, args);
-        var map2 = CommandLineArgumentUtil.parseArguments(Set.of(), args);
-        var map3 = CommandLineArgumentUtil.parseArguments(Set.of("end", "start", "transportation-method"), args);
+        var map1 = CommandLineArgumentUtil.parseArguments(args, null);
+        var map2 = CommandLineArgumentUtil.parseArguments(args, Set.of());
+        var map3 = CommandLineArgumentUtil.parseArguments(args, Set.of("end", "start", "transportation-method"));
 
         // then
         assertThat(map1).containsExactlyInAnyOrderEntriesOf(expected);
@@ -70,7 +70,7 @@ class CommandLineArgumentUtilTest {
         };
 
         // when
-        var actual = CommandLineArgumentUtil.parseArguments(null, args);
+        var actual = CommandLineArgumentUtil.parseArguments(args, null);
 
         // then
         assertThat(actual).containsExactlyInAnyOrderEntriesOf(expected);
@@ -79,13 +79,13 @@ class CommandLineArgumentUtilTest {
     @Test
     void testParseWithMissingArguments() {
         var requiredArgumentNames = Set.of("start", "end",  "transportation-method");
-        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(requiredArgumentNames, new String[0]))
+        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(new String[0], requiredArgumentNames))
                 .hasMessageContainingAll(
                 "Missing required argument: --start",
                         "Missing required argument: --transportation-method",
                         "Missing required argument: --end"
                 );
-        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(requiredArgumentNames, new String[]{" --end "}))
+        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(new String[]{" --end "}, requiredArgumentNames))
                 .hasMessageContainingAll(
                         "Missing required argument: --start",
                         "Missing required argument: --transportation-method",
@@ -98,7 +98,7 @@ class CommandLineArgumentUtilTest {
                 "\"Los Angeles\"",
                 "--transportation-method=electric-car-large"
         };
-        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(requiredArgumentNames, args))
+        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(args, requiredArgumentNames))
                 .hasMessageStartingWith("Missing required argument: --end");
 
         var args2 = new String[] {
@@ -110,7 +110,7 @@ class CommandLineArgumentUtilTest {
                 "=",
                 "electric-car-large"
         };
-        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(requiredArgumentNames, args2))
+        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(args2, requiredArgumentNames))
                 .hasMessageStartingWith("Missing required argument: --start");
 
         var args3 = new String[] {
@@ -121,7 +121,7 @@ class CommandLineArgumentUtilTest {
                 " --start ",
                 "=",
         };
-        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(requiredArgumentNames, args3))
+        assertThatThrownBy(() -> CommandLineArgumentUtil.parseArguments(args3, requiredArgumentNames))
                 .hasMessageStartingWith("Missing required argument: --start");
     }
 }
