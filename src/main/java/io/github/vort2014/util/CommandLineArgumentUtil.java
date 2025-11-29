@@ -6,7 +6,7 @@ import java.util.Set;
 
 // https://stackoverflow.com/questions/367706/how-do-i-parse-command-line-arguments-in-java
 // add to CO2 project as library
-// add -k -r argument parsing
+// add -k -r argument parsing with --one-line-filesystem test
 public interface CommandLineArgumentUtil {
 
     /**
