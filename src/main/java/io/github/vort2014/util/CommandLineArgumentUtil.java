@@ -5,9 +5,8 @@ import java.util.Map;
 import java.util.Set;
 
 // https://stackoverflow.com/questions/367706/how-do-i-parse-command-line-arguments-in-java
-// test
-// docker container run --detach --name=kafka --publish 9092:9092 apache/kafka
-// key detach is present in the response map
+// add to CO2 project as library
+// add -k -r argument parsing
 public interface CommandLineArgumentUtil {
 
     /**
@@ -24,9 +23,6 @@ public interface CommandLineArgumentUtil {
         // Check for required arguments
         if (requiredArgumentNames != null && !requiredArgumentNames.isEmpty()) {
             var sb = new StringBuilder();
-
-//            res.keySet().retainAll(requiredArgumentNames);
-
             for (var requiredArgumentName: requiredArgumentNames) {
                 if (!res.containsKey(requiredArgumentName)) sb.append("Missing required argument: --").append(requiredArgumentName).append("\n");
             }
