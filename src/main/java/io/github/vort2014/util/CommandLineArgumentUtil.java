@@ -14,8 +14,8 @@ public interface CommandLineArgumentUtil {
      * Parse command line arguments with required argument names
      *
      * @param args command line arguments from main method
-     * @param requiredArgumentNames required argument name
-     * @return arguments as Map<argName, argValue>
+     * @param requiredArgumentNames required argument names
+     * @return arguments as Map<argName, argValue>, argValue may be null
      * @throws IllegalArgumentException if required argument name is absent
      */
     static Map<String, String> parseArguments(String[] args, Set<String> requiredArgumentNames) {
@@ -24,9 +24,11 @@ public interface CommandLineArgumentUtil {
         // Check for required arguments
         if (requiredArgumentNames != null && !requiredArgumentNames.isEmpty()) {
             var sb = new StringBuilder();
+
+//            res.keySet().retainAll(requiredArgumentNames);
+
             for (var requiredArgumentName: requiredArgumentNames) {
-                var value = res.get(requiredArgumentName);
-                if (value == null) sb.append("Missing required argument: --").append(requiredArgumentName).append("\n");
+                if (!res.containsKey(requiredArgumentName)) sb.append("Missing required argument: --").append(requiredArgumentName).append("\n");
             }
             if (!sb.isEmpty()) throw new IllegalArgumentException(sb.toString());
         }
