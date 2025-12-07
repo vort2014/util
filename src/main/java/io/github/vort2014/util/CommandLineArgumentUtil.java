@@ -5,13 +5,40 @@ import java.util.Map;
 import java.util.Set;
 
 // https://stackoverflow.com/questions/367706/how-do-i-parse-command-line-arguments-in-java
-// test
-// docker container run --detach --name=kafka --publish 9092:9092 apache/kafka
-// key detach is present in the response map
+// add to CO2 project as library
+// add -k -r argument parsing with --one-line-filesystem test
 public interface CommandLineArgumentUtil {
 
-    static Map<String, String> parseArguments(Set<String> requiredArgumentNames, String[] args) {
+    /**
+     * Parse command line arguments with required argument names
+     *
+     * @param args command line arguments from main method
+     * @param requiredArgumentNames required argument names
+     * @return arguments as Map<argName, argValue>, argValue may be null
+     * @throws IllegalArgumentException if required argument name is absent
+     */
+    static Map<String, String> parseArguments(String[] args, Set<String> requiredArgumentNames) {
+        var res = parseArguments(args);
 
+        // Check for required arguments
+        if (requiredArgumentNames != null && !requiredArgumentNames.isEmpty()) {
+            var sb = new StringBuilder();
+            for (var requiredArgumentName: requiredArgumentNames) {
+                if (!res.containsKey(requiredArgumentName)) sb.append("Missing required argument: --").append(requiredArgumentName).append("\n");
+            }
+            if (!sb.isEmpty()) throw new IllegalArgumentException(sb.toString());
+        }
+
+        return res;
+    }
+
+    /**
+     * Parse command line arguments
+     *
+     * @param args command line arguments from main method
+     * @return arguments as Map<argName, argValue>
+     */
+    static Map<String, String> parseArguments(String[] args) {
         // remove leading and trailing spaces
         for (int i = 0; i < args.length; i++) {
             if (args[i] != null) {
@@ -53,17 +80,6 @@ public interface CommandLineArgumentUtil {
                 res.put(key, value);
             }
         }
-
-        // Check for required arguments
-        if (requiredArgumentNames != null && !requiredArgumentNames.isEmpty()) {
-            var sb = new StringBuilder();
-            for (var requiredArgumentName: requiredArgumentNames) {
-                var value = res.get(requiredArgumentName);
-                if (value == null) sb.append("Missing required argument: --").append(requiredArgumentName).append("\n");
-            }
-            if (!sb.isEmpty()) throw new IllegalArgumentException(sb.toString());
-        }
-
         return res;
     }
 }
